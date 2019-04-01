@@ -28,6 +28,56 @@ parentIDs: "GreetingAccount2", "GreetingGuest2"
 keywords: "null"
 responses: "Ok, thank you. How can I help you? I can help you with troubleshooting, accounts, product review, product ordering, or placing a ticket." , "Sounds good. What can I assist you with today? Maybe you'd like to order a product, leave a product review, or manage your account? Or, maybe you're having issues and need some help troubleshooting, or would like to open a support ticket?"
 ##
+nodeID:"BotInfo"
+parentIDs:"Root"
+keywords:"Bot"
+responses:"Hi! I'm the bot designed by team 12. I can tell you about what wasn't implemented, or about the dialogue tree."
+##
+nodeID:"BotHistory"
+parentIDs:"BotInfo"
+keywords:"implemented"
+responses:"We were supposed to use XP principles, and generally we did but SCRUM would have worked better for us."
+##
+nodeID:"BotHistory2"
+parentIDs:"BotHistory"
+keywords:"Continue"
+responses:"We wanted to have command words that would let you go back in the conversation or see possible keywords, but we weren't able to implement that."
+##
+nodeID:"BotHistory3"
+parentIDs:"BotHistory2"
+keywords:"Continue"
+responses:"We had a lot of disagreements too, and our code was designed around what a few people wanted rather than what the group wanted."
+##
+nodeID:"BotHistory4"
+parentIDs:"BotHistory3"
+keywords:"Continue"
+responses:"Still, we all did our part and managed to make it work for us."
+##
+nodeID:"BotDialogueTree"
+parentIDs:"BotInfo"
+keywords:"Dialogue", "tree"
+responses:"Cool! If I'm being honest, I wrote almost all of the dialogue that you see (+95%), so I found it hard to write about anything else without creating other features."
+##
+nodeID:"BotDialogueTree2"
+parentIDs:"BotDialogueTree"
+keywords:"Continue"
+responses:"I hope you don't mind."
+##
+nodeID:"BotDialogueTree3"
+parentIDs:"BotDialogueTree2"
+keywords:"Continue"
+responses:"My favourite part was the different products. Seemed funny to me."
+##
+nodeID:"BotDialogueTree4"
+parentIDs:"BotDialogueTree3"
+keywords:"Continue"
+responses:"Ok! See yah!"
+##
+nodeID:"Account"
+parentIDs:"Root"
+keywords:"Account"
+responses:"What about your account would you like to discuss?"
+##
 nodeID:"Account"
 parentIDs:"Root"
 keywords:"Account"
@@ -354,7 +404,7 @@ keywords:"yes"
 responses:"Hmm, I'm not sure how I could help then. It could be a bad hardrive or faulty part, so I would suggest visiting one of our local stores and having a professional do a full check-up in person."
 ##
 nodeID:"BotReview"
-parentIDs: "ForgotAccount4", "NewAccount4", "ReviewProduct3", "Order2", "TicketLate4", "WarrantyBox", "WarrantyStore", "WarrantyNo", "MissingLinkYes", "MissingPurchaseYes", "MissingPurchaseNo", "InternetWifiNo", "InternetWiredNo", "InternetResetNo", "InternetFirewallNo", "InternetUnsure", "RestartNo", "KillAppsNo", "SpaceNo", "VirusMalwareNo", "SlowUnsure"
+parentIDs: "ForgotAccount4", "NewAccount4", "ReviewProduct3", "Order2", "TicketLate4", "WarrantyBox", "WarrantyStore", "WarrantyNo", "MissingLinkYes", "MissingPurchaseYes", "MissingPurchaseNo", "InternetWifiNo", "InternetWiredNo", "InternetResetNo", "InternetFirewallNo", "InternetUnsure", "RestartNo", "KillAppsNo", "SpaceNo", "VirusMalwareNo", "SlowUnsure", "BotHistory4", "BotDialogueTree4"
 keywords:"Continue"
 responses:"On a scale of 1 to 5, how would you rate the service I have provided?"
 ##
