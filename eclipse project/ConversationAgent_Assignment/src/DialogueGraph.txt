@@ -1,0 +1,365 @@
+nodeID: "Greeting"
+parentIDs: "null"
+keywords: "null"
+responses: "Hello! My name is *name* and I'll be helping you today. Are you using an account with us?" , "Hi there, I'm *name* and I'll be assisting you today. Before I can help you, do you have an account with us?"
+##
+nodeID:"GreetingAccount"
+parentIDs:"Greeting"
+keywords:"Yes"
+responses:"Ok! What is your username?" , "Fantastic! And what is your username?"
+##
+nodeID: "GreetingAccount2"
+parentIDs: "GreetingAccount"
+keywords: "null"
+responses: "And what is your password? You can trust me, I swear." , "Alright, and the password associated with that account? You can totally trust me, this is definitely safe."
+##
+nodeID: "GreetingGuest"
+parentIDs: "Greeting"
+keywords: "No"
+responses: "Alright, we'll continue with a guest account. May I ask what your name is?" , "We'll use a guest account instead, then. Can you tell me what your name is?"
+##
+nodeID: "GreetingGuest2"
+parentIDs: "GreetingGuest"
+keywords: "null"
+responses: "Ok, and what email can I use? This is for reference." , "Alright, and am I able to get your email for reference, please?"
+##
+nodeID: "Root"
+parentIDs: "GreetingAccount2", "GreetingGuest2"
+keywords: "null"
+responses: "Ok, thank you. How can I help you? I can help you with troubleshooting, accounts, product review, product ordering, or placing a ticket." , "Sounds good. What can I assist you with today? Maybe you'd like to order a product, leave a product review, or manage your account? Or, maybe you're having issues and need some help troubleshooting, or would like to open a support ticket?"
+##
+nodeID:"Account"
+parentIDs:"Root"
+keywords:"Account"
+responses:"What about your account would you like to discuss?"
+##
+nodeID:"NewAccount"
+parentIDs:"Account"
+keywords:"New"
+responses:"Alright! To start making a new account I'll first need your username."
+##
+nodeID:"NewAccount2"
+parentIDs:"NewAccount"
+keywords:"null"
+responses:"Now I require your password. It's totally safe, trust me. Totally."
+##
+nodeID:"NewAccount3"
+parentIDs:"NewAccount2"
+keywords:"null"
+responses:"Alright, now an email address."
+##
+nodeID: "NewAccount4"
+parentIDs:"NewAccount3"
+keywords:"null"
+responses:"Alright! Account created! Go to your email to verify your account and then restart a conversation with me using you account information."
+##
+nodeID:"ForgotAccount"
+parentIDs:"Account"
+keywords:"Forgot"
+responses:"Alright! Type in the email your account is associated to. We'll send a code to verify information."
+##
+nodeID:"ForgotAccount2"
+parentIDs:"ForgotAccount"
+keywords:"null"
+responses:"Ok! An email was totally sent, just input the code you received."
+##
+nodeID:"ForgotAccount3"
+parentIDs:"ForgotAccount2"
+keywords:"null"
+responses:"Alright! Type in your new password."
+##
+nodeID: "ForgotAccount4"
+parentIDs:"ForgotAccount3"
+keywords:"null"
+responses:"Great! Your password has been saved."
+##
+nodeID:"ReviewProduct"
+parentIDs:"Root"
+keywords:"Review"
+responses:"Ok! What is the name of the product you would like to review? We currently offer the Legit Laptop, the Choice Tablet, the Epic Phone, and the Gamer Computer"
+##
+nodeID:"LegitLaptop"
+parentIDs:"ReviewProduct"
+keywords: "legit", "laptop"
+responses:"Ok, you want to review the Legit Laptop (TM) by Microhard. How do you rate it out of five?"
+##
+nodeID:"ChoiceTablet"
+parentIDs:"ReviewProduct"
+keywords:"choice", "tablet"
+responses:"Ok, let's start a review for the Choice Tablet (TM) by M'apple. What's it like on a scale of five?"
+##
+nodeID:"EpicPhone"
+parentIDs:"ReviewProduct"
+keywords:"epic", "phone"
+responses:"Epic choice on the Epic Phone (TM) by ElijahWood. How many stars do you give it out of five?"
+##
+nodeID:"GamerComputer"
+parentIDs:"ReviewProduct"
+keywords:"gamer", "computer"
+responses:"That's an out-of-this-world computer (TM) by Martian. How many stars do you give it out of five?"
+##
+nodeID:"ReviewProduct2"
+parentIDs:"GamerComputer","EpicPhone","ChoiceTablet","LegitLaptop"
+keywords:"null"
+responses:"Ok, what do you have to say about your experience with the product, and would you say it was good or bad?"
+##
+nodeID:"GoodProduct"
+parentIDs:"ReviewProduct2"
+keywords:"good"
+responses:"Thank you for the positive review! Is there anything we could have done better?"
+##
+nodeID:"BadProduct"
+parentIDs:"ReviewProduct2"
+keywords:"bad"
+responses:"We're sorry this product did not meet your expectations. In short, is there anything that would make it better?"
+##
+nodeID:"ReviewProduct3"
+parentIDs:"BadProduct", "GoodProduct"
+keywords:"null"
+responses:"Thank you for the review!"
+##
+nodeID: "Order"
+parentIDs: "Root"
+keywords: "Order"
+responses:"Ok, what is the product you would like to order? We currently offer the Legit Laptop, the Choice Tablet, the Epic Phone, and the Gamer Computer."
+##
+nodeID:"OrderLegitLaptop"
+parentIDs:"Order"
+Keywords:"legit", "laptop"
+responses:"Nice, I heard that one's pretty legit. Their marketing campaign was that you could use it like a skateboard."
+##
+nodeID:"OrderChoiceTablet"
+parentIDs:"Order"
+Keywords:"choice", "tablet"
+Responses: "Oh, my cousin has that choice tablet. He got it as a gift."
+##
+nodeID:"OrderEpicPhone"
+parentIDs:"Order"
+Keywords:"epic", "phone"
+Responses: "All my friends are using that epic phone right now. It looks cool! Not sure how the mouse feature works though."
+##
+nodeID:"OrderGamerComputer"
+parentIDs:"Order"
+Keywords:"gamer", "computer"
+responses:"Ah yes, I see you are a gamer of culture."
+##
+nodeID:"OrderCCInfo"
+parentIDs:"OrderGamerComputer","OrderEpicPhone","OrderChoiceTablet","OrderLegitLaptop"
+keywords:"Continue"
+responses:"I'll need some credit card info for the purchase (just put in random numbers)"
+##
+nodeID:"OrderCCInfo2"
+parentIDs:"OrderCCInfo"
+keywords:"null"
+responses:"And the name on the card?"
+##
+nodeID:"OrderAddress"
+parentIDs:"OrderCCInfo2"
+keywords:"null"
+responses:"And what is your address?"
+##
+nodeID: "Order2"
+parentIDs: "OrderAddress"
+keywords:"null"
+responses:"Alright! I've sent you an email invoice. Please review the product when it arrives!"
+##
+nodeID: "Ticket"
+parentIDs: "Root"
+keywords: "Ticket"
+responses:"Ok, is this ticket about a late package or a broken device?"
+##
+nodeID:"TicketLate"
+parentIDs:"Ticket"
+keywords:"late"
+responses:"Alright, what did you order?"
+##
+nodeID:"TicketLate2"
+parentIDs:"TicketLate"
+keywords:"null"
+responses:"And when was your package ordered?"
+##
+nodeID:"TicketLate3"
+parentIDs:"TicketLate2"
+keywords:"null"
+responses:"When was it supposed to arrive?"
+##
+nodeID:"TicketLate4"
+parentIDs:"TicketLate3"
+keywords:"null"
+responses:"Ok! I've sent the ticket to a live operator to investigate further. They will correspond to you via email. Please check there for more info."
+##
+nodeID:"TicketBroken"
+parentIDs:"Ticket"
+keywords:"Broken"
+responses:"What is the name of the product?"
+##
+nodeID:"TicketBroken2"
+parentIDs:"TicketBroken"
+keywords:"null"
+responses:"Can you briefly describe what is broken?"
+##
+nodeID:"TicketBroken3"
+parentIDs:"TicketBroken2"
+keywords:"null"
+responses:"Is it still under Warranty?"
+##
+nodeID:"WarrantyYes"
+parentIDs:"TicketBroken3"
+keywords:"yes"
+responses:"Alright, would you rather have us send you a box to return the product, or do you want to take it to a local store to have it fixed?"
+##
+nodeID:"WarrantyNo"
+parentIDs:"TicketBroken3"
+keywords:"No"
+responses:"Unfortunately, we do not cover repairs products past their warranty. You will have to take it to a local store to have it fixed."
+##
+nodeID:"WarrantyBox"
+parentIDs:"WarrantyYes"
+keywords:"box"
+responses:"Ok, what is your address and we'll ship you a box to return your product, free of shipping. Please include a copy of the receipt you used to purchase the device."
+##
+nodeID:"WarrantyStore"
+parentIDs:"WarrantyYes"
+keywords:"Store"
+responses:"Alright, please access our StoreFinder page to find locations that will handle your device. Remember to include a copy of the receipt you used to purchase the device."
+##
+nodeID:"TicketMissing"
+parentIDs:"Ticket"
+keywords:"Missing"
+responses:"I'm sorry to hear that our product arrived with a missing part. What was the product and missing part?"
+##
+nodeID:"TicketMissing2"
+parentIDs:"TicketMissing"
+keywords:"null"
+responses:"Do you have a copy of your receipt? I'll need you to share a link to it to verify. Please upload the image to a different site and share the link here."
+##
+nodeID:"MissingLinkYes"
+parentIDs:"TicketMissing2"
+keywords:".com", ".jpg", ".png", "link", "yes"
+responses: "What is your address? We'll ship a part to you via express shipping."
+##
+nodeID:"MissingLinkNo"
+parentIDs:"TicketMissing2"
+keywords:"no"
+responses:"Unfortunately I am unable to ship you a part for free. Do you wish to purchase the missing part?"
+##
+nodeID:"MissingPurchaseYes"
+parentIDs:"MissingLinkNo"
+keywords:"yes"
+responses:"Ok! Please input your credit card info (just use random numbers), and include your address."
+##
+nodeID:"MissingPurchaseNo"
+parentIDs:"MissingLinkNo"
+keywords:"No"
+responses:"I am sorry I cannot be of more help. Try talking to a live operator, or go to one of our local stores."
+##
+nodeID:"Troubleshoot"
+parentIDs:"Root"
+keywords:"Troubleshoot"
+responses:"Alright, what seems to be the problem? I'm kinda knowledgeable on the topics of internet and slow devices."
+##
+nodeID: "Internet"
+parentIDs:"Troubleshoot"
+keywords:"Internet"
+Responses:"Are you trying to connect via wifi or wired connection?"
+##
+nodeID:"InternetWifi"
+parentIDs:"Internet"
+keywords:"wifi"
+responses:"Is the wifi on your device turned on?"
+##
+nodeID:"InternetWired"
+parentIDs:"Internet"
+keywords:"wired"
+responses: "Are all the external cables to the tower plugged in properly? Primarily the power and ethernet cables?"
+##
+nodeID:"InternetWifiNo"
+parentIDs:"InternetWifi"
+keywords:"No"
+responses:"Ok, make sure to turn on wifi for your device. That should fix your problem."
+##
+nodeID:"InternetWiredNo"
+parentIDs:"InternetWired"
+keywords:"No"
+Responses: "Ok, plug those in. That should fix your problem."
+##
+nodeID:"InternetReset"
+parentIDs:"InternetWifi","InternetWired"
+keywords:"Yes"
+responses:"Have you tried resetting your router/modem and device?"
+##
+nodeID:"InternetResetNo"
+parentIDs:"InternetReset"
+keywords:"No"
+responses:"Ok, turn off your router/modem/device for at least 30 seconds, then turn them back on. This fixes issues in the majority of cases."
+##
+nodeID:"InternetFirewall"
+parentIDs:"InternetReset"
+keywords:"Yes"
+responses:"Alright, have you checked your firewall settings?"
+##
+nodeID:"InternetFirewallNo"
+parentIDs:"InternetFirewall"
+keywords:"Yes"
+responses:"Alright, find out the address to access your modem (Often 192.0.0.1) from your device and check to make sure that your device is allowed to access the internet. Also check your firewall settings on your computer, as your computer may have placed a firewall on your browser."
+##
+nodeID:"InternetUnsure"
+parentIDs:"InternetFirewall"
+keywords:"Yes"
+responses:"I'm not certain I can help. I've sent a ticket to a live operator and they will continue a conversation with you via email. You may also wish to take your computer into one of our local locations to have a professional test the machine."
+##
+nodeID:"SlowDevice"
+parentIDs:"Troubleshoot"
+keywords:"slow"
+responses:"Have you tried restarting your device?"
+##
+nodeID:"BackgroundApps"
+parentIDs:"SlowDevice"
+keywords:"yes"
+responses:"Often, background applications can be consuming CPU and RAM without users realizing. Have you killed non-essential applications?"
+##
+nodeID:"RestartNo"
+parentIDs:"SlowDevice"
+keywords:"No"
+responses:"Alright, the longer a device is on the more RAM is used. A simple restart may make your computer run much faster."
+##
+nodeID:"KillAppsNo"
+parentIDs:"BackgroundApps"
+keywords:"No"
+responses:"I would suggest disabling those background applications! While you're at it, you could look what applications start on startup and disable the ones you find are unimportant. This can slow the computer down quite a bit."
+##
+nodeID:"HardDriveSpace"
+parentIDs:"BackgroundApps"
+keywords:"yes"
+responses:"Have you cleaned some Hard Drive Space recently? Often computers will run slower if there is less than 10% space left on their hard drive."
+##
+nodeID:"SpaceNo"
+parentIDs:"HardDriveSpace"
+keywords:"no"
+responses:"Ok! Take some time and delete files you no longer need until you have at least 10% space left on your computer, then restart it."
+##
+nodeID:"VirusMalware"
+parentIDs:"HardDriveSpace"
+keywords:"yes"
+responses:"Have you run a virus and malware scan recently? They can slow a computer down dramatically, aside from the potential loss of data. I would recommend our program, TotallyLegitHardwareScans."
+##
+nodeID:"VirusMalwareNo"
+parentIDs:"VirusMalware"
+keywords:"No"
+responses:"Feel free to run those scans! And I get a bonus if you use that program, so I'd appreciate it if you did. You can download it at https://www.totallylegithardwarescans.com"
+##
+nodeID:"SlowUnsure"
+parentIDs:"VirusMalware"
+keywords:"yes"
+responses:"Hmm, I'm not sure how I could help then. It could be a bad hardrive or faulty part, so I would suggest visiting one of our local stores and having a professional do a full check-up in person."
+##
+nodeID:"BotReview"
+parentIDs: "ForgotAccount4", "NewAccount4", "ReviewProduct3", "Order2", "TicketLate4", "WarrantyBox", "WarrantyStore", "WarrantyNo", "MissingLinkYes", "MissingPurchaseYes", "MissingPurchaseNo", "InternetWifiNo", "InternetWiredNo", "InternetResetNo", "InternetFirewallNo", "InternetUnsure", "RestartNo", "KillAppsNo", "SpaceNo", "VirusMalwareNo", "SlowUnsure"
+keywords:"Continue"
+responses:"On a scale of 1 to 5, how would you rate the service I have provided?"
+##
+nodeID:"BotReview2"
+parentIDs:"BotReview"
+keywords:"null"
+responses:"How satisfied were you with our conversation?"
+##

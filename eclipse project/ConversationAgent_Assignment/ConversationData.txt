@@ -1,0 +1,10 @@
+nodeID: "Root"
+parentIDs: "null"
+keywords: "null"
+responses: "Hello my name is *name*. What is your name?"
+##
+nodeID: "Reply"
+parentIDs: "Root"
+keywords: "name"
+responses: "Nice to meet you *user_name*." , "I hope I can help you today *user_name*."
+##
