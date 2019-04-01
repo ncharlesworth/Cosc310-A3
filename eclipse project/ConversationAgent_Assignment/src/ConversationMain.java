@@ -4,14 +4,19 @@ import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.Scanner;
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
 
-public class ConversationMain {
+public class ConversationMain implements ActionListener {
 	final static String FILENAME = "DialogueGraph.txt";
 	final static String INITIALIZATION_NODE = "Greeting";
 
 	public static ConversationGraph conversation; // Stores the conversation tree of possible replies
 	public static Agent agent; // Stores session info
 	public static int steps = 0; // turn counter
+	public static JTextArea chat = new JTextArea();
+	public static JTextField myTextField = new JTextField(30);
 
 	/**
 	 * This function initializes the ConversationGraph object by calling the
@@ -53,6 +58,9 @@ public class ConversationMain {
 		conversation.parseConversationNodes(filein);
 		filein.close();
 		agent.conversationPath.add(INITIALIZATION_NODE);
+			String response = agent.selectResponse(conversation.get(agent.getCurrentNode()));
+			agent.addResponse(response);
+			agent.speak(response);
 	}
 
 	/**
@@ -65,6 +73,9 @@ public class ConversationMain {
 	 * @throws URISyntaxException
 	 */
 	public static void main(String[] args) {
+		
+		setupGUI();
+		
 		Scanner scanner = new Scanner(System.in);
 
 		conversation = new ConversationGraph();
@@ -73,15 +84,12 @@ public class ConversationMain {
 		int rand = (int) (Math.random() * names.length);
 		agent = new Agent(names[rand]);
 		
-		System.out.println("WELCOME to Electronics Emporium! One of our customer service representatives will be with your shortly...\n");
-
+		//System.out.println("WELCOME to Electronics Emporium! One of our customer service representatives will be with your shortly...\n");
+		updateTextArea("WELCOME to Electronics Emporium! One of our customer service representatives will be with your shortly...\n");
+		
+		
 		try {
 			initializeConversation();
-			boolean loop = true;
-			while (loop) {
-				agent.execute(conversation, scanner);
-			}
-			agent.speak("Thank you very much for using our servce. Take care and have a fantastic day!");
 			scanner.close();
 		} catch (IOException e) {
 			System.out.println(
@@ -92,6 +100,72 @@ public class ConversationMain {
 
 		}
 	}
+	
+	//Following Function creates the chat GUI using javax.swing and java.awt.
+	public static void setupGUI() {
+		
+		//My GUI Frame
+		JFrame GUIframe = new JFrame("ChatBot Conversation GUI");
+		GUIframe.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		GUIframe.setSize(800,400);
+		
+		//GUI Panel Setup
+		JPanel panel1 = new JPanel();
+		JButton enter = new JButton("Enter");
+		
+		//Listener for the Submit button
+		enter.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				String newUserInput = (myTextField.getText()).trim();
+				
+				if(newUserInput.length()>=1){
+					agent.execute(conversation, newUserInput);
+					myTextField.setText("");
+				}	
+			}
+		});
+		//Listener to enable users to press Enter into the textfield
+		myTextField.addActionListener(new ActionListener(){
+			public void actionPerformed(ActionEvent e) {
+				String newUserInput = (myTextField.getText()).trim();
+				
+				if(newUserInput.length()>=1){
+					agent.execute(conversation, newUserInput);
+					myTextField.setText("");
+				}	
+			}
+		});
+		
+		panel1.add(myTextField);
+		panel1.add(enter);
+		
+		//JTextArea chat = new JTextArea();
+		chat.setEditable(false);
+		JScrollPane letsScroll = new JScrollPane(chat);
+		
+		GUIframe.getContentPane().add(BorderLayout.SOUTH, panel1);
+		//GUIframe.getContentPane().add(BorderLayout.CENTER, chat);
+		GUIframe.getContentPane().add(BorderLayout.CENTER, letsScroll);
+		GUIframe.setVisible(true);	
+
+		
+	}
+	
+	//Used to update the GUI
+	public static void updateTextArea(String text) {
+		chat.append(text);
+		chat.setCaretPosition(chat.getDocument().getLength());
+	}
+	
+	public void actionPerformed(ActionEvent e) {
+		/*String newUserInput = (myTextField.getText()).trim();
+		
+		if(newUserInput.length()>=1){
+			agent.execute(conversation, newUserInput);
+		}
+		*/
+	}
+	
 
 	/**
 	 * Used only as a demonstration of how to use the Agent and ConversationNode
