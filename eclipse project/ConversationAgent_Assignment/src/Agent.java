@@ -27,6 +27,8 @@ public class Agent {
 																		// if user name is Bob then ->
 																		// userInfo.put("name", "Bob")
 
+	int previousRandomResponse = 17;
+
 	/**
 	 * Variable names for graph traversal behavior. Any node that is CONTINUE_NODE
 	 * as its keyword will skip asking for the user's input. This is generally used
@@ -246,7 +248,12 @@ public class Agent {
 		responseList.add("I'm sorry, I'm a bit confused by what you're asking.");
 		responseList.add("Would you be able to rephrase that for me? I'm a little confused with what you are asking.");
 		responseList.add("Perhaps you could be a bit more specific, I don't quite understand what you mean.");
+		responseList.add("Could you say that like you're speaking to a child? I don't understand for some reason.");
 		int random = new Random().nextInt(responseList.size());
+		while(previousRandomResponse==random) {
+			random = new Random().nextInt(responseList.size());
+		}
+		previousRandomResponse=random;
 		String response = responseList.get(random);
 		speak(response);
 		addUserInput(scanner.nextLine());
