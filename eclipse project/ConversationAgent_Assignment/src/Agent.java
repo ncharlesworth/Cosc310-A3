@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.Set;
 
 /**
@@ -26,6 +25,8 @@ public class Agent {
 																		// and email
 																		// if user name is Bob then ->
 																		// userInfo.put("name", "Bob")
+	Boolean visited = false;
+	int previousRandomResponse = 17;
 
 	int previousRandomResponse = 17;
 
@@ -69,37 +70,51 @@ public class Agent {
 	 * @param graph The ConversationGraph being used. 
 	 * @param scanner The System.in scanner instantiated in the main program method.
 	 */
-	public void execute(ConversationGraph graph, Scanner scanner) {
+	public void execute(ConversationGraph graph, String newUserInput) {
+		
+		//Output user's Input to GUI
+		ConversationMain.updateTextArea("(You): " + newUserInput + "\n");
+		
+		// pass and store user input to handleInput
+		addUserInput(newUserInput);
+		String nextNode = handleInput(graph, getUserInput());
+		
+		// If userInput was viable, Traverse to node returned by handleInput():		
+		if(nextNode != null) {
+			conversationPath.add(nextNode);
+			visited = false;
+		}
+		
 		// Check if agent is at the end node; if so, reset back to the root node.
 		if (graph.get(getCurrentNode()).getID().equals(END_NODE)) {
 			conversationPath.add(ROOT_NODE);
 		}
-
-		// Retrieve a response from the current node, store it in response history, then output to user:
-		String response = selectResponse(graph.get(getCurrentNode()));
-		addResponse(response);
-		speak(response);
-
-		// Receive input from the user if it is required, ignoring cases that contain only whitespace.
-		String userInput = "";
-		if (!(peekKeywords(graph).keySet().contains(CONTINUE_NODE))) {
-			userInput = scanner.nextLine();
-			while (!(userInput.trim().length() > 0)) {
-				userInput = scanner.nextLine();
-			}
+		
+		// Retrieve a response from the current node, store it in response history, then output to user:		
+		if(!visited) {
+			String response = selectResponse(graph.get(getCurrentNode()));
+			addResponse(response);
+			speak(response);
+			visited = true;
 		}
 
-		// If next node is a CONTINUE_NODE, pass null to handleInput(); otherwise, pass and store user input.
-		String nextNode;
+		isContinueNode(graph);
+
+	}
+	
+	
+	public void isContinueNode(ConversationGraph graph) {
 		if (peekKeywords(graph).keySet().contains(CONTINUE_NODE)) {
-			nextNode = handleInput(graph, null, scanner);
-		} else {
-			addUserInput(userInput);
-			nextNode = handleInput(graph, getUserInput(), scanner);
-		}
-
-		// Traverse to node returned by handleInput():
-		conversationPath.add(nextNode);
+			
+			String nextNode = handleInput(graph, null);
+			conversationPath.add(nextNode);
+			
+			String response = selectResponse(graph.get(getCurrentNode()));
+			addResponse(response);
+			speak(response);
+			
+			isContinueNode(graph);	
+		} 
 	}
 
 	/**
@@ -115,7 +130,9 @@ public class Agent {
 	 *                  method.
 	 * @return nodeID to traverse to.
 	 */
-	public String handleInput(ConversationGraph graph, String userInput, Scanner scanner) {
+	public String handleInput(ConversationGraph graph, String userInput) {
+	
+		
 		Set<String> keywords = peekKeywords(graph).keySet();
 		ArrayList<String> matchedNodes = new ArrayList<String>();
 		int keywordCounter = 0;
@@ -129,12 +146,40 @@ public class Agent {
 		}
 
 		// Check if the userInput contains a keyword of a child node:
+		/*NateNote: I think this takes a keyword and compares it to any substring matches, where
+		 * 	each substring is the same size as the keyword.
+		 * This needs to not do that, because stuff like "Arnold" will count as "no" if the keyword is "no"
+		 * ^^This isn't a typo, it's literally a different word
+		*/
 		for (String keyword : keywords) {
+			
+			ArrayList<String> synonyms = getSynonyms(keyword);
+			
+			if(compareWords(synonyms, userInput)) {
+				keywordCounter++;
+				// Store nodeIDs of any matched keywords into list:
+				matchedNodes.add(peekKeywords(graph).get(keyword));
+				break;
+			}
+			
+			
+			/*
+			for(int i = 0; i < synonyms.size(); i++) {
+				if (userInput.indexOf(synonyms.get(i)) >= 0) {
+					keywordCounter++;
+					// Store nodeIDs of any matched keywords into list:
+					matchedNodes.add(peekKeywords(graph).get(keyword));
+					break;
+				}
+				
+			}*/
+			
+			/*
 			if (userInput.indexOf(keyword) >= 0) {
 				keywordCounter++;
 				// Store nodeIDs of any matched keywords into list:
 				matchedNodes.add(peekKeywords(graph).get(keyword));
-			}
+			}*/
 		}
 		/**
 		 * Check how many keywords were matched from user input. If only one keyword is
@@ -148,6 +193,7 @@ public class Agent {
 		 * to.
 		 */
 		if (keywordCounter > 1) {
+			/*
 			String firstMatchedNode = matchedNodes.get(0);
 			int mismatchedNodes = 0;
 			for (String nodeID : matchedNodes) {
@@ -159,9 +205,14 @@ public class Agent {
 				return matchedNodes.get(0);
 			} else { // More than one nodeID found linked to keywords.
 				return handleMultiChildren(graph, userInput, scanner);
-			}
+			}*/
+			
+			/*I kept the content from what was here before, but for my purposes I felt it was entirely unnecessary, and was
+			 * based on assumed features we would implement that are kind of useless.*/
+			return matchedNodes.get(0);
+
 		} else if (keywordCounter < 1) { // No keywords found, thus no linked nodeIDs.
-			return handleNoKeyword(graph, userInput, scanner);
+			return handleNoKeyword();
 		} else { // Optimal case: exactly one keyword found that is linked to exactly one nodeID.
 			return matchedNodes.get(0);
 		}
@@ -178,7 +229,9 @@ public class Agent {
 	 */
 	public void speak(String response) {
 		response = response.replace("*name*", this.agentName);
-		System.out.println(this.agentName + ": " + response);
+		ConversationMain.updateTextArea(this.agentName + ": " + response + "\n");
+		
+		//System.out.println(this.agentName + ": " + response);
 	}
 
 	/**
@@ -196,6 +249,8 @@ public class Agent {
 	 * @return The nodeID that was determined to be where the agent should traverse
 	 *         to.
 	 */
+	/*I commented out this section because I felt it was useless.*/
+	/*
 	public String handleMultiChildren(ConversationGraph graph, String userInput, Scanner scanner) {
 		String userReply;
 		String agentReply = "";
@@ -227,7 +282,7 @@ public class Agent {
 			return handleNoKeyword(graph, userInput, scanner);
 		} else
 			return agentReply;
-	}
+	}*/
 
 	/**
 	 * Method to handle what the agent will do when the user's input contains no
@@ -241,7 +296,7 @@ public class Agent {
 	 *                  method.
 	 * @return The nodeID the agent will revert to.
 	 */
-	public String handleNoKeyword(ConversationGraph graph, String userInput, Scanner scanner) {
+	public String handleNoKeyword() {
 		ArrayList<String> responseList = new ArrayList<String>();
 		responseList.add("I'm not sure I understand. Can you rephrase that for me?");
 		responseList.add("Sorry, I don't quite understand what you're saying.");
@@ -256,8 +311,10 @@ public class Agent {
 		previousRandomResponse=random;
 		String response = responseList.get(random);
 		speak(response);
-		addUserInput(scanner.nextLine());
-		return handleInput(graph, getUserInput(), scanner);
+		
+		visited = true;
+		return null;
+		
 	}
 
 	/**
@@ -336,6 +393,186 @@ public class Agent {
 		int random = new Random().nextInt(node.getResponses().size());
 		return node.getResponses().get(random);
 
+	}
+	
+	/**
+	 * Returns an arraylist of synonyms based off of the given string. 
+	 * Will only find synonyms of first word if there is more than one word sent.
+	 * 
+	 * @param rootWord
+	 * @return
+	 */
+	public ArrayList<String> getSynonyms(String rootWord){
+		ArrayList<String> synonyms = new ArrayList<String>();
+		String trimmedRootWord = rootWord.trim();
+		
+		/*
+		int endIndex;
+		if(trimmedRootWord.indexOf(" ")>0) {
+			endIndex = trimmedRootWord.indexOf(" ")-1;
+		}else {
+			endIndex = trimmedRootWord.length()-1;
+		}
+		String wordToGetSynonymsFrom = trimmedRootWord.substring(0, endIndex);
+		synonyms.add(wordToGetSynonymsFrom);
+		
+		*/
+		//GetSynonyms
+		
+		synonyms.add(trimmedRootWord);
+		return synonyms;
+	}
+	
+	public boolean compareWords(ArrayList<String> synonyms, String userInput) {
+		
+		boolean match = false;
+		ArrayList<String> userInputAsArray = toWordArray(userInput);
+		
+		for (int x = 0; x < synonyms.size(); x++) {
+			if(match == true) {
+				break;
+			}
+			char[] curSynonym = synonyms.get(x).toCharArray();
+			int charCount=0;
+			
+			for (int z = 0; z < userInputAsArray.size(); z++) {
+				if(match == true) {
+					break;
+				}
+				char[] curInputWord = userInputAsArray.get(z).toCharArray();
+
+				if(curInputWord.length == curSynonym.length) {
+					for(int c = 0; c < curSynonym.length; c++) {
+						if(curInputWord[c] == curSynonym[c]) {
+							charCount++;
+						}
+						else if(checkSwappedCharacter(curSynonym, curInputWord, c)) {
+							charCount++;
+						}
+						if(charCount >= curSynonym.length) {
+							match = true;
+						}
+					}	
+				}
+				else if(curInputWord.length == curSynonym.length+1) {	
+					for(int c = 0; c < curSynonym.length; c++) {
+						if(curInputWord[c] == curSynonym[c]) {
+							charCount++;
+						}
+						else if(checkExtraCharacter(curSynonym, curInputWord, c)) {
+							charCount++;
+							c++;
+						}
+						else if(checkSwappedCharacter(curSynonym, curInputWord, c)) {
+							charCount++;
+						}
+						if(charCount >= curSynonym.length){
+							match = true;
+							break;
+						}
+					}
+				}
+				else if(curInputWord.length == curSynonym.length-1) {		
+					for(int c = 0; c < curInputWord.length; c++) {
+						if(curInputWord[c] == curSynonym[c]) {
+							charCount++;
+						}
+						else if(checkMissingCharacter(curSynonym, curInputWord, c)) {
+							charCount++;
+						}
+						else if(checkSwappedCharacter(curSynonym, curInputWord, c)) {
+							charCount++;
+						}
+						if(charCount >= curSynonym.length-1){
+							match = true;
+							break;
+						}
+					}
+				}
+			}
+			charCount = 0;
+		}
+		return match;
+	}
+	
+	/**
+	 * returns true if previous or next character in index is equal to the current on in curInputWord
+	 * @param curSynonym -- current synonym we are testing
+	 * @param curInputWord -- current user word we are testing
+	 * @param c -- current point in the index
+	 * @return
+	 */
+	
+	private boolean checkSwappedCharacter(char[] curSynonym, char[] curInputWord, int c) {
+		
+		/*check if current character is same as next character
+		 * check if current character is same as previous character
+		 * We know they aren't the same in both because otherwise we wouldn't be here
+		 * 
+		 * */
+		
+		
+		if(c!=0) {
+			if(curInputWord[c] == curSynonym[c-1]) {
+				return true;
+			}
+		}
+		if(c < curSynonym.length-2) {
+			if(curInputWord[c] == curSynonym[c+1]) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
+	 * Determines if curInputWord has an extra character by comparing it to the next two
+	 * 
+	 * @param curSynonym
+	 * @param curInputWord
+	 * @param c
+	 * @return
+	 */
+	private boolean checkExtraCharacter(char[] curSynonym, char[] curInputWord, int c) {
+		if(c < curSynonym.length-3 && c < curInputWord.length-3) {
+			if(curInputWord[c] == curSynonym[c+1]) {
+				if(curInputWord[c+1] == curSynonym[c+2]) {
+					return true;
+				}
+			}	
+		}
+		return false;
+	}
+
+	/**
+	 * 
+	 * @param curSynonym current Synonym we're working with
+	 * @param curInputWord Current word to test
+	 * @param c the current index
+	 * @return true if current index of curInputWord equals the next character in curSynonym
+	 */
+	private boolean checkMissingCharacter(char[] curSynonym, char[] curInputWord, int c) {
+		
+		if(curInputWord[c] == curSynonym[c+1]) {
+			return true;
+		}
+		return false;
+	}
+
+	/** takes a string and cuts words into substrings, then adds those to an arraylist
+	 * The split is determined based off of the whitespace
+	 * 
+	 * @param A string that you want to cut into words
+	 * @return an arraylist of the words
+	 */
+	public ArrayList<String> toWordArray(String input){
+		ArrayList<String> words = new ArrayList<String>();
+		String[] splitString = (input.trim()).split(" ");
+		
+		for (int q = 0; q < splitString.length; q++) {
+			words.add(splitString[q]);
+		}
+		return words;
 	}
 
 }
