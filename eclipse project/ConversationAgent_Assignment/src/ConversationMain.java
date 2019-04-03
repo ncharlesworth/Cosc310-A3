@@ -72,7 +72,7 @@ public class ConversationMain implements ActionListener {
 	 * @throws IOException
 	 * @throws URISyntaxException
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
 		
 		setupGUI();
 		

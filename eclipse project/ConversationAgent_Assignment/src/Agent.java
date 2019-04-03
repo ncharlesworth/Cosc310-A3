@@ -1,4 +1,6 @@
-
+/**Using JWI by MIT, Ver 2.4.0
+ * Also using Princeton's WordNet
+ */
 
 import java.io.File;
 import java.io.IOException;
@@ -31,13 +33,11 @@ public class Agent {
 																		// and email
 																		// if user name is Bob then ->
 																		// userInfo.put("name", "Bob")
-	Boolean visited = false;
-	int previousRandomResponse = 17;
-	boolean outputSynonymsToConsole = true;
+	Boolean visited = false; //Used to determine if the program has visited the current node already
+	int previousRandomResponse = 17; //Random starting int for determining whether random response has been seen before
+	boolean outputSynonymsToConsole = false; //Set to true if you want to see the list of synonyms in the console.
 	
 
-
-	int previousRandomResponse = 17;
 
 	/**
 	 * Variable names for graph traversal behavior. Any node that is CONTINUE_NODE
@@ -62,12 +62,6 @@ public class Agent {
 		this.userInput = new ArrayList<String>();
 		this.agentResponses = new ArrayList<String>();
 		this.conversationPath = new ArrayList<String>();
-		
-		/*
-		File dictDir = new File("src\\dict");	
-		IDictionary dict = new Dictionary(dictDir);
-		dict.open();	*/
-		
 	}
 
 	public String getAgetName() {
@@ -75,15 +69,13 @@ public class Agent {
 	}
 
 	/**
-	 * Agent behavior method. This method will need to be looped in the main method to have an ongoing
-	 * conversation, otherwise this method will only handle one interaction between the agent and user.
+	 * Agent behavior method.
 	 * <br><br>
-	 * The agent will find where it is located on the conversation graph, detect what type of behavior
-	 * it is expected to follow for that node, receive user input if it is necessary, and pass that
-	 * input to inputHandler() to make a decision based on that input. The agent will then traverse to
-	 * the next node of the conversation graph that it has deemed appropriate.
+	 * The Agent updates the text area, passes their input to handleInput, and determine what to do with
+	 * said input. If there is a viable node traversal, it will append the next node to the list,
+	 * output the text for that node, and set visited to true.
 	 * @param graph The ConversationGraph being used. 
-	 * @param scanner The System.in scanner instantiated in the main program method.
+	 * @param newUserInput input recieved from user
 	 */
 	public void execute(ConversationGraph graph, String newUserInput) {
 		
@@ -117,6 +109,11 @@ public class Agent {
 
 	}
 	
+	/**If the next node has "CONTINUE" as a keyword, this will output text for that node and append it to the node.
+	 * It calls itself until it finds a node that doesn't have "CONTINUE" as its keyword.
+	 * 
+	 * @param graph -- the current graph
+	 */
 	
 	public void isContinueNode(ConversationGraph graph) {
 		if (peekKeywords(graph).keySet().contains(CONTINUE_NODE)) {
@@ -141,8 +138,6 @@ public class Agent {
 	 * 
 	 * @param graph     The ConversationGraph being used.
 	 * @param userInput Input from the user.
-	 * @param scanner   The System.in scanner instantiated in the main program
-	 *                  method.
 	 * @return nodeID to traverse to.
 	 */
 	public String handleInput(ConversationGraph graph, String userInput) {
@@ -171,36 +166,13 @@ public class Agent {
 				matchedNodes.add(peekKeywords(graph).get(keyword));
 				break;
 			}
-			
-			
-			/*
-			for(int i = 0; i < synonyms.size(); i++) {
-				if (userInput.indexOf(synonyms.get(i)) >= 0) {
-					keywordCounter++;
-					// Store nodeIDs of any matched keywords into list:
-					matchedNodes.add(peekKeywords(graph).get(keyword));
-					break;
-				}
-				
-			}*/
-			
-			/*
-			if (userInput.indexOf(keyword) >= 0) {
-				keywordCounter++;
-				// Store nodeIDs of any matched keywords into list:
-				matchedNodes.add(peekKeywords(graph).get(keyword));
-			}*/
 		}
 		/**
-		 * Check how many keywords were matched from user input. If only one keyword is
-		 * matched, then we know exactly what nodeID we need to traverse to. If no
-		 * keywords are matched, then we need to ask the user for new input to clarify
-		 * what they want. If more than one keyword is matched, then we need to find if
-		 * all those keywords are linked to the same nodeID or not. If they are, then
-		 * there is no ambiguity and we know exactly what nodeID to traverse to. If
-		 * keyword matches are linked to a set of different nodeIDs (we have mismatched
-		 * nodes), then we need to find out what node the user actually intended to get
-		 * to.
+		 * The following commented-out text would determine what to do based off of the amount of 
+		 * keywords that matched to different nodes. Because I wrote the dialoguegraph and know
+		 * there aren't any situations where nodes have the same name, I felt it wasn't really that
+		 * useful and have commented it out. I also know that MatchedKeywords doesn't completely work
+		 * properly anyways, so it's a feature we don't need and can't use.
 		 */
 		if (keywordCounter > 1) {
 			/*
@@ -216,9 +188,6 @@ public class Agent {
 			} else { // More than one nodeID found linked to keywords.
 				return handleMultiChildren(graph, userInput, scanner);
 			}*/
-			
-			/*I kept the content from what was here before, but for my purposes I felt it was entirely unnecessary, and was
-			 * based on assumed features we would implement that are kind of useless.*/
 			return matchedNodes.get(0);
 
 		} else if (keywordCounter < 1) { // No keywords found, thus no linked nodeIDs.
@@ -298,12 +267,6 @@ public class Agent {
 	 * Method to handle what the agent will do when the user's input contains no
 	 * keywords for child nodes. Takes a new response from the user and passes it
 	 * back to handleInput() to be be parsed.
-	 * 
-	 * @param graph     A ConversationGraph.
-	 * @param userInput Input from the user that does not contain any relevant
-	 *                  keywords.
-	 * @param scanner   The System.in scanner instantiated in the main program
-	 *                  method.
 	 * @return The nodeID the agent will revert to.
 	 */
 	public String handleNoKeyword() {
@@ -460,7 +423,7 @@ public class Agent {
 				}
 			}
 			
-			
+			//OLD SYSTEM FOR FINDING WORDS, kept in case there are issue.
 			/*creates the IIndexWord for the keyword. If it doesn't match any part of speech for some weird
 			 reason then we just don't add synonyms*/
 			/*
@@ -492,7 +455,9 @@ public class Agent {
 		
 		return synonyms;
 	}
-	/**
+	/** returns an arraylist of all synonyms related to one word. Partial, because it doesn't cover all
+	 * definitions of the word as it relates to their Parts of Speech. So if a word is both a noun and
+	 * a verb, this would only return the noun or verb.
 	 * 
 	 * @param idxWord a IIndexWord you want an array of synonyms for
 	 * @param dict the IDictionary file you want to pull synonyms from
@@ -517,7 +482,13 @@ public class Agent {
 		return partialSynonymList;
 	}
 	
-	
+	/**The Following determines if a user's word matches any word in the synonyms arraylist, and returns true if
+	 * there is a match.
+	 * 
+	 * @param synonyms List of words, called synonym because all words should be synonyms of the word at 0 index
+	 * @param userInput User Input passed from Agent/handleInput
+	 * @return
+	 */
 	public boolean compareWords(ArrayList<String> synonyms, String userInput) {
 		
 		boolean match = false;
