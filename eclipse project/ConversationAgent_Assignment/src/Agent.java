@@ -1,7 +1,13 @@
+
+
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
 import java.util.Set;
+import edu.mit.jwi.*;
+import edu.mit.jwi.item.*;
 
 /**
  * The Agent object represents the conversation agent. This object is used to store information 
@@ -27,6 +33,9 @@ public class Agent {
 																		// userInfo.put("name", "Bob")
 	Boolean visited = false;
 	int previousRandomResponse = 17;
+	boolean outputSynonymsToConsole = true;
+	
+
 
 	int previousRandomResponse = 17;
 
@@ -48,11 +57,17 @@ public class Agent {
 	final String ROOT_NODE = "Root";
 
 	// Constructor
-	public Agent(String name) {
+	public Agent(String name) throws IOException {
 		this.agentName = name;
 		this.userInput = new ArrayList<String>();
 		this.agentResponses = new ArrayList<String>();
 		this.conversationPath = new ArrayList<String>();
+		
+		/*
+		File dictDir = new File("src\\dict");	
+		IDictionary dict = new Dictionary(dictDir);
+		dict.open();	*/
+		
 	}
 
 	public String getAgetName() {
@@ -146,11 +161,6 @@ public class Agent {
 		}
 
 		// Check if the userInput contains a keyword of a child node:
-		/*NateNote: I think this takes a keyword and compares it to any substring matches, where
-		 * 	each substring is the same size as the keyword.
-		 * This needs to not do that, because stuff like "Arnold" will count as "no" if the keyword is "no"
-		 * ^^This isn't a typo, it's literally a different word
-		*/
 		for (String keyword : keywords) {
 			
 			ArrayList<String> synonyms = getSynonyms(keyword);
@@ -400,28 +410,113 @@ public class Agent {
 	 * Will only find synonyms of first word if there is more than one word sent.
 	 * 
 	 * @param rootWord
-	 * @return
+	 * @return list of the keyword and all synonyms found in WordNet
 	 */
-	public ArrayList<String> getSynonyms(String rootWord){
+	public ArrayList<String> getSynonyms(String keyword){
 		ArrayList<String> synonyms = new ArrayList<String>();
-		String trimmedRootWord = rootWord.trim();
+		String trimmedkeyword = keyword.trim();
+		synonyms.add(trimmedkeyword);
 		
-		/*
-		int endIndex;
-		if(trimmedRootWord.indexOf(" ")>0) {
-			endIndex = trimmedRootWord.indexOf(" ")-1;
-		}else {
-			endIndex = trimmedRootWord.length()-1;
+		File dictDir = new File("src\\dict");
+		IDictionary dict = new Dictionary(dictDir);
+		try {
+			dict.open();
+		} catch (IOException e) {
+			System.out.println("Not sure why this broke, but it's when you .open() the Dictionary");
+			e.printStackTrace();
 		}
-		String wordToGetSynonymsFrom = trimmedRootWord.substring(0, endIndex);
-		synonyms.add(wordToGetSynonymsFrom);
 		
-		*/
-		//GetSynonyms
+		if(dict.isOpen()) {
+			
+			//This checks the word in WordNet with all POSs to add all definitions to the synonym list
+			for(int i = 0; i < 4; i++) {
+				if(i == 0) {
+					IIndexWord idxWord = dict.getIndexWord(keyword, POS.NOUN);
+					if(idxWord != null) {
+						ArrayList<String> tempArrayList = makePartialSynonymList(idxWord, dict);
+						synonyms.addAll(tempArrayList);
+					}
+				}
+				if(i == 1) {
+					IIndexWord idxWord = dict.getIndexWord(keyword, POS.VERB);
+					if(idxWord != null) {
+						ArrayList<String> tempArrayList = makePartialSynonymList(idxWord, dict);
+						synonyms.addAll(tempArrayList);
+					}
+				}
+				if(i == 2) {
+					IIndexWord idxWord = dict.getIndexWord(keyword, POS.ADJECTIVE);
+					if(idxWord != null) {
+						ArrayList<String> tempArrayList = makePartialSynonymList(idxWord, dict);
+						synonyms.addAll(tempArrayList);
+					}
+				}
+				if(i == 3) {
+					IIndexWord idxWord = dict.getIndexWord(keyword, POS.ADVERB);
+					if(idxWord != null) {
+						ArrayList<String> tempArrayList = makePartialSynonymList(idxWord, dict);
+						synonyms.addAll(tempArrayList);
+					}
+				}
+			}
+			
+			
+			/*creates the IIndexWord for the keyword. If it doesn't match any part of speech for some weird
+			 reason then we just don't add synonyms*/
+			/*
+			IIndexWord idxWord = dict.getIndexWord(keyword, POS.NOUN);
+			if(idxWord == null) {
+				 idxWord = dict.getIndexWord(keyword, POS.VERB);
+				 if(idxWord == null) {
+					 idxWord = dict.getIndexWord(keyword, POS.ADJECTIVE);
+					 if(idxWord == null) {
+						 idxWord = dict.getIndexWord(keyword, POS.ADVERB);
+					 }
+				 }
+			}
+			//getSynonyms
+			if(idxWord != null) {
+				for(IWordID wordID : idxWord.getWordIDs()) {
+					IWord word = dict.getWord(wordID);
+					ISynset synset = word.getSynset();
+					for(IWord w : synset.getWords()) {
+						synonyms.add(w.getLemma());
+						
+						if(outputSynonymsToConsole) {
+							System.out.println("Lemma = " + w.getLemma());						
+						}
+					}
+				}
+			}*/
+		}
 		
-		synonyms.add(trimmedRootWord);
 		return synonyms;
 	}
+	/**
+	 * 
+	 * @param idxWord a IIndexWord you want an array of synonyms for
+	 * @param dict the IDictionary file you want to pull synonyms from
+	 * @return ArrayList of words that are synonyms
+	 */
+	public ArrayList<String> makePartialSynonymList(IIndexWord idxWord, IDictionary dict){
+		ArrayList<String> partialSynonymList = new ArrayList<String>();
+		
+		if(idxWord != null) {
+			for(IWordID wordID : idxWord.getWordIDs()) {
+				IWord word = dict.getWord(wordID);
+				ISynset synset = word.getSynset();
+				for(IWord w : synset.getWords()) {
+					partialSynonymList.add(w.getLemma());
+					
+					if(outputSynonymsToConsole) {
+						System.out.println("Lemma = " + w.getLemma());						
+					}
+				}
+			}
+		}
+		return partialSynonymList;
+	}
+	
 	
 	public boolean compareWords(ArrayList<String> synonyms, String userInput) {
 		
