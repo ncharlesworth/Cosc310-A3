@@ -36,7 +36,7 @@ responses:"Hi! I'm the bot designed by team 12. I can tell you about what wasn't
 nodeID:"BotHistory"
 parentIDs:"BotInfo"
 keywords:"implemented"
-responses:"We were supposed to use XP principles, and generally we did but SCRUM would have worked better for us."
+responses:"We used our XP principles loosely for this project! We teamed up and worked on goals in pairs."
 ##
 nodeID:"BotHistory2"
 parentIDs:"BotHistory"
@@ -51,7 +51,7 @@ responses:"We had a lot of disagreements too, and our code was designed around w
 nodeID:"BotHistory4"
 parentIDs:"BotHistory3"
 keywords:"Continue"
-responses:"Still, we all did our part and managed to make it work for us."
+responses:"Still, we all did our part and managed to make it work for us. We overcame our disagreements and did what we had to for the project to be done."
 ##
 nodeID:"BotDialogueTree"
 parentIDs:"BotInfo"
@@ -61,17 +61,17 @@ responses:"Cool! If I'm being honest, I wrote almost all of the dialogue that yo
 nodeID:"BotDialogueTree2"
 parentIDs:"BotDialogueTree"
 keywords:"Continue"
-responses:"I hope you don't mind."
+responses:"I hope you don't mind. It took a really long time, honestly."
 ##
 nodeID:"BotDialogueTree3"
 parentIDs:"BotDialogueTree2"
 keywords:"Continue"
-responses:"My favourite part was the different products. Seemed funny to me."
+responses:"My favourite part was the different products. I loved writing the bot responses to user's product choices."
 ##
 nodeID:"BotDialogueTree4"
 parentIDs:"BotDialogueTree3"
 keywords:"Continue"
-responses:"Ok! See yah!"
+responses:"I think the Troubleshooting branch is the most complicated. Check it out! Ok! See yah!"
 ##
 nodeID:"Account"
 parentIDs:"Root"
