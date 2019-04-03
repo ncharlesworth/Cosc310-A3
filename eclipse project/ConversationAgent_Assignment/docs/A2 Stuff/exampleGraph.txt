@@ -1,0 +1,25 @@
+nodeID: "root"
+parentIDs: null
+keywords: null
+responses: "Hello, how can I help you?"
+##
+nodeID: "ticket"
+parentIDs: "root"
+keywords: "problem","ticket","issue"
+responses: "Okay, you'd like to open a ticket.","Sounds like you'd like to open a ticket. Sure, let's get started with that."
+##
+nodeID: "ticketLate"
+parentIDs: "ticket"
+keywords: "late","hasn't arrived","where is"
+responses: "You'd like to ask about a shipment that has yet to arrive.","You say your shipment is late? Let me take a look and find out what's going on for you."
+##
+nodeID: "ticketIssue"
+parentIDs: "ticket"
+keywords: "problem","issue","not working"
+responses: "Okay, you're having a technical issues with a product." , "I'm sorry to hear you're having issues. Let me help you with that."
+##
+nodeID: "order"
+parentIDs: "root"
+keywords: "order","place"
+responses: "Okay, so you'd like to place an order.","I can definitely assist you with making an order."
+##
