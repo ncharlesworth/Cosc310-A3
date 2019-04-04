@@ -240,8 +240,7 @@ It allows for the user to have more variety in their speech. So instead of using
   5. Agent/Bot -- If someone were to alter DialogueGraph but leave everything else the same, they could write text for their own bot. So the program as a whole works as an API that way.
 
 
-# Video Presentation
-![Settings Window](https://github.com/ncharlesworth/Cosc310-A3/blob/master/project_management/A3/Video/COSC310-A3-Nate-Charlesworth-49440167.mp4)
+# Video Presentation -- Go Here (https://github.com/ncharlesworth/Cosc310-A3/blob/master/project_management/A3/Video/COSC310-A3-Nate-Charlesworth-49440167.mp4)
 
 ## Installation:
 
