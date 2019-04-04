@@ -216,6 +216,9 @@ It allows for the user to have more variety in their speech. So instead of using
 
 ![Alt text](/project_management/A3/DFD/Level 0 DFD.png?raw=true "Level 0 DFD")
 
+ ![Settings Window](https://raw.githubusercontent.com/ncharlesworth/Cosc310-A3/master/project_management/A3/DFD/Level%200%20DFD.png)
+ ![Settings Window](https://github.com/ncharlesworth/Cosc310-A3/blob/master/project_management/A3/DFD/Level%200%20DFD.png)
+
 ## Level 1 DFD
 - Diagram included in project_Management/A3/
 - User input triggers the chatbot. It collects a list of keywords from the Conversation Graph database, then sends that list off to the Dictionary to get a list of Synonyms. It compares the user input to the Synonyms, and determines what output it wants based off of matches. It sends that output to a function that Updates the Gui.
