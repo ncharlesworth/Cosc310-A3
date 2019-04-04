@@ -167,7 +167,7 @@ NOTE: This feature branch has been cancelled. The user interface will be command
 
 
 --------------------------------------------------------------------------------------------------------------------------------
-A3 Information (End of ReadMe Information) (5 Points):
+#A3 Information (End of ReadMe Information) (5 Points):
 
 Features I implemented:
  - Simple GUI (5 Points)
