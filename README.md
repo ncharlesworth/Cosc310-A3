@@ -187,9 +187,11 @@ Benefit of a nice GUI via an Executable File is that you don't need to install E
 
 ### Extra Topic (2 Points)
 
-I wrote an extra topic. You can see it in the Astah map file as "BotInfo", or go down the "Bot" branch.
+I wrote an extra topic. You can see it in the Astah map file as "BotInfo", or go down the "Bot" branch. (
+Cosc310-A3/eclipse project/ConversationAgent_Assignment/docs/(A3)_Cosc310_G12_Diagram.asta)
 
 I felt that if we had written this program for others to see that it would be nice for people to know a little about the team. That, and I couldn't think of much else the bot could deal with directly with a user from A2.
+
 ### Canned Responses (3 Points)
 
 We already had 5 canned responses, so I added a 6th one and made sure that you will never get the same canned response twice in a row. If ever the bot is confused, you'll know for sure.
@@ -238,6 +240,8 @@ It allows for the user to have more variety in their speech. So instead of using
   5. Agent/Bot -- If someone were to alter DialogueGraph but leave everything else the same, they could write text for their own bot. So the program as a whole works as an API that way.
 
 
+# Video Presentation
+![Settings Window](https://github.com/ncharlesworth/Cosc310-A3/blob/master/project_management/A3/Video/COSC310-A3-Nate-Charlesworth-49440167.mp4)
 
 ## Installation:
 
