@@ -211,9 +211,12 @@ It allows for the user to have more variety in their speech. So instead of using
 - I don't like that you need to have the dict folder in the same directory as "A3 Chatbot.jar" when running the executable, but it's the only way I could find to make it work.
 
 ## Level 0 DFD
+- Diagram included in project_Management/A3/
+- User Input triggers the chatbot to execute. It determines how to respond to the input, and sends that data to a function that updates the GUI.
 
 ## Level 1 DFD
-
+- Diagram included in project_Management/A3/
+- User input triggers the chatbot. It collects a list of keywords from the Conversation Graph database, then sends that list off to the Dictionary to get a list of Synonyms. It compares the user input to the Synonyms, and determines what output it wants based off of matches. It sends that output to a function that Updates the Gui.
 
 
 ## Sample Output
