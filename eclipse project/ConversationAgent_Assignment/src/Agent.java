@@ -2,8 +2,10 @@
  * Also using Princeton's WordNet
  */
 
+//import java.io.File;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
@@ -380,12 +382,20 @@ public class Agent {
 		String trimmedkeyword = keyword.trim();
 		synonyms.add(trimmedkeyword);
 		
-		File dictDir = new File("src\\dict");
+		//speak("just before trying to load the book");
+		//TODO If using this to create an EXECUTABLE JAR FILE, use the next line. 
+		//IF RUNNING CODE IN ECLIPSE, use the second line
+		//URL dictDir = Agent.class.getResource("jar:file:/dict");
+		File dictDir = new File(getClass().getResource("dict").getFile());
+		
+		//File dictDir = new File("dict");
+		//File dictDir = new File("src\\dict");
+		
 		IDictionary dict = new Dictionary(dictDir);
 		try {
 			dict.open();
 		} catch (IOException e) {
-			System.out.println("Not sure why this broke, but it's when you .open() the Dictionary");
+			speak("The Dictionary didn't open which means I reference the dict folder wrong, probably");
 			e.printStackTrace();
 		}
 		
