@@ -6,6 +6,9 @@
 
 ### University of British Columbia, Okanagan Campus
 
+##A3 Submission: Nate Charlesworth 49440167
+
+##A2 Team:
 - Nate Charlesworth
 - Christopher Cheung
 - Connor Kingsmill
