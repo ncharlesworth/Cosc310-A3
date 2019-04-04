@@ -123,12 +123,11 @@ This branch is focused on populating a ConversationGraph data structure with Con
 
 Dedicated to taking user input and searching the ConversationGraph to find the appropriate response from the conversation agent. This handles the interaction between the user and the conversation agent, traversing the conversation graph appropriately based on these interactions.
 
-### UserInterface (CANCELLED)
+### UserInterface (Dropped)
 
 The interface for which the conversation agent and user will interact. Whether a simple command-line interaction, or a more robust GUI will be utilized, has yet to be determined.
 
 NOTE: This feature branch has been cancelled. The user interface will be command-line input and output.
-
 ## Project SDLC: Agile: eXtreme Programming (XP)
 
  We have chosen XP as the SDLC for this project as its scope is very development-oriented, which lends itself well to the XP paradigm. As our team-size is quite small, XP also seems relevant as there is less inherent micro-management and a focus on collaboration from the entire team to produce the best software possible. Since XP adapts a test-driven development (TDD) philosophy, we find this appealing as the success of the project will largely depend on whether the agent responds correctly to user input; by ensuring complete testing coverage through TDD, this will provide us the desired result. Further, as our team is likely to have different coding style, structure, and naming practices, an iterative refactoring process is beneficial to ensure our software remains uniform and understandable for both those developing the software itself or viewing the source later. As the requirements of the project are likely to change throughout the development process as we become more familiar with the design and implementation necessary for a functional conversational agent, something our team has no experience with, the XP approach seems most applicable as it allows for easy incorporation of changes when our requirements undoubtedly change throughout the process of the project.
@@ -166,18 +165,74 @@ NOTE: This feature branch has been cancelled. The user interface will be command
   4. Finalize project report
   5. Release software
 
-## Limitations of Program:
 
-- Program will not be able to detect words that are spelled incorrectly.
+--------------------------------------------------------------------------------------------------------------------------------
+A3 Information (End of ReadMe Information) (5 Points):
+
+Features I implemented:
+ - Simple GUI (5 Points)
+ - Extra Topic (2 Points)
+ - Canned Responses (3 Points)
+ - Spelling Mistake Tests (5 Points)
+ - Language Toolkit -- Synonyms via Princeton's WordNet and MIT's JWI api (10 Points)
+ 
+### Simple GUI as an Executable (5 Points)
+
+I have written a GUI for the program. Simply run the executable and the program will load as a GUI. Press the "Enter" button, or press enter on your keyboard while you can actively type in the box. Implementing the GUI meant rewriting the code from being Scanner based to event based.
+
+Benefit of a nice GUI via an Executable File is that you don't need to install Eclipse or another IDE to run the program. 
+
+### Extra Topic (2 Points)
+
+I wrote an extra topic. You can see it in the Astah map file as "BotInfo", or go down the "Bot" branch.
+
+I felt that if we had written this program for others to see that it would be nice for people to know a little about the team. That, and I couldn't think of much else the bot could deal with directly with a user from A2.
+### Canned Responses (3 Points)
+
+We already had 5 canned responses, so I added a 6th one and made sure that you will never get the same canned response twice in a row. If ever the bot is confused, you'll know for sure.
+
+The lack of repetition in the bot's confused responses makes it feel more real, improving the conversation.
+
+### Spell Check (5 Points)
+
+Checks for switched characters, and 1 extra or missing character. If you hit enough characters in the right order, the program assumes you meant the current keyword and continues down that conversation. It does mean some weird situations, like "ees" counting as "yes," however it's an improvement over our previous system. Before, we tested to see if your characters had an index in the sentence. With larger words this was fine, but if you had typed in "Arnold" and the keyword was "no", the program assumed you meant no. That's not an issue anymore.
+
+So not only does it fix issues with a previous system, it also can understand simple spelling mistakes, so users don't need to waste time trying to fix typos, if they happen.
+
+### Language Toolkit -- Synonym recognition (10 Points)
+
+Using the Princeton Wordnet (https://wordnet.princeton.edu/), and the MIT JWI (https://projects.csail.mit.edu/jwi/), I have coded the program to check for synonyms of the keywords and see if they match the user input. 
+
+It allows for the user to have more variety in their speech. So instead of using "Order", you could say "I wanted help ordering a product", which the language toolkit enables. The conversation feels much more natural.
+
+## Limitations of Program:
 - User input containing many key words may trigger incorrect pattern response.
-- Currently the agent handles conflicts where user input may trigger traversal to different nodes, but not in an intelligent manner. The agent will cycle through which nodes it matches keywords for, asking which one the user intended. In the future, a heuristic function could handle this decision independently of the user based on the context of the keyword found in the user input.
-- The conversation agent currently only traverses the graph in one direction, thus resulting in a conversation that cannot be “backtracked”. While the agent does indeed store the necessary information to backtrack a conversation if the user implies they wish to change topics, that functionality is not currently implemented. This, if a user engages the conversation about ordering a product from the customer service bot, they must finish that process before asking the agent to do something else.
+- Currently the agent handles conflicts where user input may trigger traversal to different nodes, but not in an intelligent manner. The Agent will jump to the first keyword matched
+- I don't like that you need to have the dict folder in the same directory as "A3 Chatbot.jar" when running the executable, but it's the only way I could find to make it work.
+
+## Level 0 DFD
+
+## Level 1 DFD
+
+
+
+## Sample Output
+
+
+## 5 Features to Extract into an API
+  1. GUI -- Someone could extract the setupGUI() function from ConversationMain and use it for their own GUI, so long as they code their program as being event based rather than Scanner based.
+  2. Spell Checking -- compareWords() and related functions could be cut into an API with minimal changes.
+  3. Conversation Graph/Nodes -- One could take the classes ConversationGraph and ConversationNodes to be used with a  DialogueGraph.txt, and they could write their own functions for accessing them.
+  4. Implementation of JWI/Wordnet -- Someone could copy my implementation of JWI/Wordnet to use it their own way.
+  5. Agent/Bot -- If someone were to alter DialogueGraph but leave everything else the same, they could write text for their own bot. So the program as a whole works as an API that way.
+
+
 
 ## Installation:
 
- 1. Download the '/built program/' folder from this repository
- 2. Make sure you have the jar executable and the Windows batch file in the same folder
- 3. Run 'run.bat' to open the conversation agent as a Java program
+ 1. Download the '/built program/A3 Chat Bot' folder from this repository
+ 2. Make sure you have the jar executable and the dict folder in the same folder
+ 3. Run 'A3 Chatbot.jar' to open the conversation agent as a Java program
 
 ### **NOTE:**
 You must have Java installed on your machine or you will be unable to open the program. If you have issues running the program please check that the path to your Java installation is set.
